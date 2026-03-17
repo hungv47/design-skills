@@ -32,6 +32,7 @@ Before delivering, verify:
 - [ ] Every token pair meets WCAG AA contrast (4.5:1 normal text, 3:1 large/UI)
 - [ ] Background/foreground convention used consistently (`bg-primary text-primary-foreground`)
 - [ ] One global `--radius` value — all components derive from it
+- [ ] Cross-element coherence: color, typography, radius, voice, and imagery all point the same direction (no single element contradicts the others)
 
 ## Chain Position
 Previous: none | Next: `user-flow`
@@ -342,6 +343,7 @@ status: draft
 - `references/color-emotion.md` — Color psychology, OKLCH values, audience palettes
 - `references/component-patterns.md` — Extended UI component patterns with token consumption maps
 - `references/paper-artboard-templates.md` — Paper MCP HTML/CSS templates
+- `references/ai-slop-detection.md` — AI-generated design anti-patterns checklist
 
 ## Anti-Patterns
 
