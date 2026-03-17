@@ -32,7 +32,8 @@ Before delivering, verify:
 - [ ] Every token pair meets WCAG AA contrast (4.5:1 normal text, 3:1 large/UI)
 - [ ] Background/foreground convention used consistently (`bg-primary text-primary-foreground`)
 - [ ] One global `--radius` value — all components derive from it
-- [ ] Cross-element coherence: color, typography, radius, voice, and imagery all point the same direction (no single element contradicts the others)
+- [ ] Cross-element coherence: radius maps to archetype (see `references/token-templates.md`), type personality matches archetype (see `references/typography-psychology.md`), color emotion aligns with brand personality (see `references/color-emotion.md`), and imagery direction reflects the archetype's visual world. Flag any element that contradicts the others.
+- [ ] AI slop check: run `references/ai-slop-detection.md` checklist against all visual outputs — 0-1 items is clean, 2-3 needs review, 4+ needs regeneration
 
 ## Chain Position
 Previous: none | Next: `user-flow`
@@ -256,6 +257,8 @@ Key requirements:
 ## Step 9: Visual Artboard Generation (Paper MCP)
 
 Render brand guidelines as 5 presentation-ready artboards if Paper MCP is available. Reference `references/artboard-generation.md` for complete specs, workflow, and prerequisites.
+
+After generating artboards, run the AI slop detection checklist (`references/ai-slop-detection.md`). Artboards are the highest-risk output for AI default patterns because they're visual-first and the agent may lean on familiar layouts instead of archetype-driven decisions.
 
 Artboards: Color Palette | Typography System | Spacing & Tokens | UI Style Principles | Logo System
 

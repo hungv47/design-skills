@@ -16,6 +16,14 @@ against this list — especially artboard content and visual direction.
 - **Gradient text on everything** — Background-clip text gradients used as default heading style.
 - **Shadow soup** — Multiple layered shadows on every card and button.
 
+## Structural Anti-Patterns
+
+These are harder to spot than visual surface patterns but more damaging — they break the design system's internal consistency.
+
+- **Heading scale without a ratio** — AI generates h1-h6 with arbitrary sizes (36/24/18/16) instead of a consistent modular scale (e.g., 1.25 major second). A flat scale means nothing feels important.
+- **Arbitrary spacing values** — Components using pixel values (13px, 22px, 37px) instead of drawing from the token scale. Real systems use a consistent base (4px or 8px grid).
+- **Missing interaction states** — Buttons and inputs without hover, focus, active, and disabled states. If interactive elements only have a default state, the design system is incomplete.
+
 ## How to Use
 
 After generating visual direction or artboards:
