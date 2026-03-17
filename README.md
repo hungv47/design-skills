@@ -29,9 +29,6 @@ brand-system → user-flow (optional sequence)
 
 - "Create a design system" → `brand-system`
 - "Create a user flow" → `user-flow`
-
-## Part of [Agent Skills](https://github.com/hungv47/agent-skills)
-
 ## License
 
 MIT
