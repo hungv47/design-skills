@@ -1,6 +1,6 @@
 ---
 name: user-flow
-description: "This skill should be invoked when the user wants to map how users navigate through an app or product -- screens, decisions, transitions, and edge cases. Triggers include 'create a user flow', 'map the user journey', 'plan screen transitions', 'users are getting lost', 'the flow is confusing', 'what happens after signup', or 'plan the UX' -- even if they just describe a feature and need to figure out the screens. Works for web, mobile, SaaS, e-commerce, onboarding. Not for visual brand design (use brand-system)."
+description: "This skill should be invoked when the user wants to map how users navigate through an app or product -- screens, decisions, transitions, and edge cases. Triggers include 'create a user flow', 'map the user journey', 'plan screen transitions', 'users are getting lost', 'the flow is confusing', 'our onboarding sucks', 'users are dropping off', 'what happens after signup', or 'plan the UX' -- even if they just describe a feature and need to figure out the screens. Works for web, mobile, SaaS, e-commerce, onboarding, checkout. Not for visual brand design (use brand-system)."
 license: MIT
 metadata:
   author: hungv47
