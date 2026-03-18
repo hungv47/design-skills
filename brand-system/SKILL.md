@@ -1,6 +1,6 @@
 ---
 name: brand-system
-description: "Builds complete brand identity and design systems — strategy, archetype, voice, visual identity, design tokens, and component patterns. Use when the user asks to create a design system, build a brand identity, define brand guidelines, create design tokens, develop brand strategy, select a brand archetype, render brand guidelines, or design in Paper."
+description: "This skill should be invoked when the user wants to build or define a brand identity, visual system, or design system. Triggers include 'create a brand', 'define our look and feel', 'I need brand guidelines', 'design tokens', 'pick a brand archetype', 'what should my brand look like', or 'I'm starting a company and need branding' -- even if they just say 'we don't have consistent design.' Also for rendering brand assets in Paper. Not for writing marketing copy (use content-create) or mapping user flows (use user-flow)."
 license: MIT
 metadata:
   author: hungv47
