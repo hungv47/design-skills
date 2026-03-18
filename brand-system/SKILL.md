@@ -19,8 +19,7 @@ metadata:
 - Competitive context (who else serves this audience, how they're positioned)
 
 ## Output
-- Brand identity document (strategy, personality, voice, visual identity)
-- Design system specification (tokens, components, motion, accessibility)
+- `.agents/design/brand-system.md`
 - Visual brand guideline artboards (if Paper MCP available)
 
 ## Quality Gate
@@ -308,6 +307,8 @@ Skip this step if Paper MCP tools are unavailable.
 ---
 
 ## Artifact Template
+
+Save to `.agents/design/brand-system.md`.
 
 On re-run: rename existing artifact to `brand-system.v[N].md` and create new with incremented version.
 
