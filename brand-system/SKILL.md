@@ -1,6 +1,6 @@
 ---
 name: brand-system
-description: "Build a brand identity and design system — strategy, archetype, voice, visual identity, design tokens, component patterns. Triggers on: create a design system, build brand identity, brand guidelines, design tokens, brand strategy, brand archetype, render brand guidelines, design in Paper."
+description: "Builds complete brand identity and design systems — strategy, archetype, voice, visual identity, design tokens, and component patterns. Use when the user asks to create a design system, build a brand identity, define brand guidelines, create design tokens, develop brand strategy, select a brand archetype, render brand guidelines, or design in Paper."
 license: MIT
 metadata:
   author: hungv47

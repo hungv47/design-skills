@@ -1,6 +1,6 @@
 ---
 name: user-flow
-description: "Create a user flow, map the user journey, wireflow, screen transitions, navigation map, task flow, interaction diagram — user flow diagrams, wireflows, task analysis, navigation architecture. Works for web apps, mobile apps, SaaS, e-commerce, onboarding, checkout, any multi-screen digital product."
+description: "Maps navigation paths, decision points, and screen-to-screen transitions into validated flow diagrams with edge case handling. Use when the user asks to create a user flow, map a user journey, design wireflows, plan screen transitions, create a navigation map, or build an interaction diagram — user flow diagrams, wireflows, task analysis, navigation architecture. Works for web apps, mobile apps, SaaS, e-commerce, onboarding, checkout."
 license: MIT
 metadata:
   author: hungv47
