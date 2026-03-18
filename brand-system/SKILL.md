@@ -19,7 +19,7 @@ metadata:
 - Competitive context (who else serves this audience, how they're positioned)
 
 ## Output
-- `.agents/design/brand-system.md`
+- `.agents/design/brand-system.md` (brand identity, voice, visual system, design tokens)
 - Visual brand guideline artboards (if Paper MCP available)
 
 ## Quality Gate
@@ -36,7 +36,9 @@ Before delivering, verify:
 
 ## Chain Position
 Previous: none | Next: `user-flow`
+
 **Re-run triggers:** After major product pivots, when entering new markets, after significant audience shifts, or annually for brand refresh.
+
 **Related skills (non-chain):** `icp-research` (audience data for brand strategy), `content-create` (consumes voice guidelines), `humanize` (uses voice adjectives)
 
 ---
@@ -74,7 +76,7 @@ If upstream artifacts' `date` fields are older than 30 days, recommend re-runnin
 | Mode | When | Scope |
 |------|------|-------|
 | **Full Brand System** | Established product, full rebrand, comprehensive guidelines needed | All 13 steps (Parts I + II) |
-| **Quick Brand** | MVP, early-stage, need to ship fast with basic brand foundations | Steps 1-7 only (Strategy through Messaging) — defers visual identity, tokens, and components |
+| **Quick Brand** | MVP, early-stage, need to ship fast with basic brand foundations | Steps 1-7 only (through Step 7: Messaging Architecture) — defers visual identity, tokens, and components |
 
 Ask: *"Full brand system or quick brand for MVP?"*
 
