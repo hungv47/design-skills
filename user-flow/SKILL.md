@@ -1,10 +1,10 @@
 ---
 name: user-flow
-description: "Maps navigation paths, decision points, and screen-to-screen transitions into validated flow diagrams with edge case handling. Use when the user asks to create a user flow, map a user journey, design wireflows, plan screen transitions, create a navigation map, or build an interaction diagram — user flow diagrams, wireflows, task analysis, navigation architecture. Works for web apps, mobile apps, SaaS, e-commerce, onboarding, checkout."
+description: "This skill should be invoked when the user wants to map multi-step in-product flows for how users navigate through an app or product, including screens, decisions, transitions, and edge cases. Triggers include 'create a user flow', 'map the user journey', 'wireframe the flow', 'plan screen transitions', 'users are getting lost', 'the flow is confusing', 'our in-app onboarding sucks', 'signup flow is broken', 'users are dropping off at step X', 'what happens after signup', or 'how does the user get from X to Y' -- even if they just describe a feature and need to figure out what screens they need, or say 'what screens do I need' or 'what's the shortest path to X.' Not for visual brand design (use brand-system), single-page conversion optimization (use lp-optimization), or marketing funnel and customer journey mapping (use imc-plan)."
 license: MIT
 metadata:
   author: hungv47
-  version: "2.0.0"
+  version: "2.0.1"
 ---
 
 # User Flow Design
