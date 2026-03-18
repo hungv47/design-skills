@@ -32,6 +32,8 @@ Before delivering, verify:
 
 ## Chain Position
 Previous: `brand-system` (optional — provides design tokens and component context) | Next: handoff to implementation
+**Re-run triggers:** When product features change significantly, when user research reveals new patterns, after usability testing reveals flow issues, or when adding new user roles.
+**Related skills (non-chain):** `system-architecture` (consumes flow diagrams for API design), `task-breakdown` (uses flows for feature decomposition), `plan-interviewer` (generates specs that inform flows)
 
 ---
 
@@ -39,6 +41,7 @@ Previous: `brand-system` (optional — provides design tokens and component cont
 
 ### Step 0: Product Context
 Check for `.agents/product-context.md`. If missing: **INTERVIEW.** Interview for product dimensions (what, who, problem, differentiator, constraints) and save to `.agents/product-context.md`. Or recommend running `icp-research (from hungv47/comms-skills)` to bootstrap it.
+If `.agents/product-context.md` has a `date` field older than 30 days, recommend re-running `icp-research` to refresh it before proceeding.
 
 ### Required Artifacts
 None — this skill can run standalone.

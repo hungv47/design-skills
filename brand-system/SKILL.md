@@ -37,6 +37,8 @@ Before delivering, verify:
 
 ## Chain Position
 Previous: none | Next: `user-flow`
+**Re-run triggers:** After major product pivots, when entering new markets, after significant audience shifts, or annually for brand refresh.
+**Related skills (non-chain):** `icp-research` (audience data for brand strategy), `content-create` (consumes voice guidelines), `humanize` (uses voice adjectives)
 
 ---
 
@@ -57,6 +59,27 @@ Previous: none | Next: `user-flow`
 **Helpful:**
 - Admired brands (aspirational and anti-aspirational)
 - Market positioning intent (premium, accessible, disruptive, trusted)
+
+### Optional Artifacts
+| Artifact | Source | Benefit |
+|----------|--------|---------|
+| `.agents/product-context.md` | icp-research (from `hungv47/comms-skills`) | Product positioning, audience, and voice adjectives — grounds brand strategy in audience research |
+| `.agents/mkt/icp-research.md` | icp-research (from `hungv47/comms-skills`) | Audience personas, pain profiles, and VoC quotes — brand strategy without audience research produces generic archetypes |
+
+**Strongly recommended:** Run `icp-research` (from comms-skills) first if audience research hasn't been done. Brand strategy built on assumed audiences produces generic, untested archetypes.
+
+If upstream artifacts' `date` fields are older than 30 days, recommend re-running `icp-research` before proceeding — audience insights evolve and stale data produces misaligned brand strategy.
+
+### Mode Selection
+
+| Mode | When | Scope |
+|------|------|-------|
+| **Full Brand System** | Established product, full rebrand, comprehensive guidelines needed | All 13 steps (Parts I + II) |
+| **Quick Brand** | MVP, early-stage, need to ship fast with basic brand foundations | Steps 1-7 only (Strategy through Messaging) — defers visual identity, tokens, and components |
+
+Ask: *"Full brand system or quick brand for MVP?"*
+
+**Quick Brand** covers: Purpose/mission/vision, core values, positioning, archetype, personality, voice/tone, messaging architecture. Defers: visual identity, token architecture, component tokens, accessibility/dark mode, and Paper artboards. Quick Brand output includes a note: "Run full brand-system when ready to build the design system."
 
 Missing product details are not guessable — interview for them.
 
