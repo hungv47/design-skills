@@ -1,6 +1,6 @@
 ---
 name: brand-system
-description: "This skill should be invoked when the user wants to build or define a brand identity, visual system, or design system. Triggers include 'create a brand', 'define our look and feel', 'I need brand guidelines', 'logo', 'color palette', 'typography', 'font', 'style guide', 'visual identity', 'rebrand', 'design tokens', or 'what should my brand look like' -- even if they just say 'we look unprofessional', 'we don't have consistent design', 'our visuals are all over the place', 'we look generic', or 'our product doesn't feel premium.' Not for writing marketing copy (use content-create) or mapping user flows (use user-flow)."
+description: "This skill should be invoked when the user wants to build or define a brand identity, visual system, or design system. Triggers include 'create a brand', 'define our look and feel', 'I need brand guidelines', 'logo', 'color palette', 'typography', 'font', 'style guide', 'visual identity', 'rebrand', 'design tokens', or 'what should my brand look like' -- even if they just say 'we look unprofessional', 'we don't have consistent design', or 'our product doesn't feel premium.' Not for writing marketing copy (use content-create) or mapping user flows (use user-flow)."
 license: MIT
 metadata:
   author: hungv47
