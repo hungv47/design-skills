@@ -1,10 +1,11 @@
 ---
 name: user-flow
-description: "This skill should be invoked when the user wants to map multi-step in-product flows for how users navigate through an app or product, including screens, decisions, transitions, and edge cases. Triggers include 'create a user flow', 'map the user journey', 'wireframe the flow', 'plan screen transitions', 'users are getting lost', 'the flow is confusing', 'our in-app onboarding sucks', 'signup flow is broken', 'users are dropping off at step X', 'what happens after signup', or 'how does the user get from X to Y' -- even if they just describe a feature and need to figure out what screens they need, or say 'what screens do I need' or 'what's the shortest path to X.' Not for visual brand design (use brand-system), single-page conversion optimization (use lp-optimization), or marketing funnel and customer journey mapping (use imc-plan)."
+description: "Maps multi-step in-product flows — screens, decisions, transitions, edge cases, and error states for features or user journeys. Produces `.agents/design/user-flow.md`. Not for visual brand design (use brand-system) or single-page conversion (use lp-optimization)."
+argument-hint: "[feature or flow to map]"
 license: MIT
 metadata:
   author: hungv47
-  version: "2.0.1"
+  version: "2.0.2"
 ---
 
 # User Flow Design
