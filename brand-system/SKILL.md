@@ -8,7 +8,7 @@ metadata:
   version: "5.0.0"
 ---
 
-# Brand Identity & Design System — Multi-Agent Orchestrator
+# Brand Identity & Design System — Orchestrator
 
 *Design — Step 1 of 2. Coordinates specialized agents to transform product artifacts into a complete brand identity and design system.*
 

@@ -8,7 +8,7 @@ metadata:
   version: "3.0.0"
 ---
 
-# User Flow Design — Multi-Agent Orchestrator
+# User Flow Design — Orchestrator
 
 *Design — Step 2 of 2. Coordinates specialized agents to map navigation paths, decision points, edge cases, and screen-to-screen transitions into a validated flow diagram.*
 
