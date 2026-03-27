@@ -5,14 +5,21 @@ argument-hint: "[feature or flow to map]"
 license: MIT
 metadata:
   author: hungv47
-  version: "2.0.2"
+  version: "3.0.0"
 ---
 
-# User Flow Design
+# User Flow Design — Multi-Agent Orchestrator
 
-*Design — Step 2 of 2. Maps navigation paths, decision points, and screen-to-screen transitions into a validated flow diagram.*
+*Design — Step 2 of 2. Coordinates specialized agents to map navigation paths, decision points, edge cases, and screen-to-screen transitions into a validated flow diagram.*
 
 **Core Question:** "Can the user complete their goal without thinking?"
+
+## Critical Gates — Read First
+
+- **Do NOT create diagrams before mapping structure.** Diagram-agent needs structure-agent's screen inventory and edge-case-agent's state coverage. Visualizing before mapping produces incomplete flows.
+- **Do NOT skip edge cases.** Error, empty, loading, permission, and offline states must be mapped for every screen. Happy-path-only flows break at the first unexpected state.
+- **Do NOT accept >7 happy path steps without challenge.** Miller's threshold is the validation baseline. Every step must justify its existence — can it be removed, combined, or automated?
+- **Stale product context (>30 days) produces misaligned flows.** Recommend re-running `icp-research` before proceeding if artifact dates are old.
 
 ## Inputs Required
 - A product or feature requiring flow mapping (new feature, redesign, or existing flow audit)
@@ -23,13 +30,17 @@ metadata:
 - `.agents/design/user-flow.md`
 
 ## Quality Gate
-Before delivering, verify:
+Before delivering, the **critic agent** verifies:
 - [ ] Every decision point has ≥2 labeled exits (including the unhappy path)
 - [ ] Error paths lead to recovery states — no dead ends
 - [ ] Entry and exit points are explicit (not implied)
 - [ ] Flow serves exactly one user goal — split if multiple goals emerged
 - [ ] Empty, loading, and permission states are accounted for
 - [ ] Back/cancel actions are defined at every step where the user might retreat
+- [ ] Happy path ≤7 steps (Miller's threshold)
+- [ ] ≤3 primary actions per screen
+- [ ] Diagram notation correct (5 shapes used properly)
+- [ ] Screen inventory complete with concrete names
 
 ## Chain Position
 Previous: `brand-system` (optional — provides design tokens and component context) | Next: handoff to implementation
@@ -38,11 +49,51 @@ Previous: `brand-system` (optional — provides design tokens and component cont
 
 **Related skills (non-chain):** `system-architecture` (consumes flow diagrams for API design), `task-breakdown` (uses flows for feature decomposition), `plan-interviewer` (generates specs that inform flows)
 
+### Skill Deference
+- **Requirements unclear?** Run `plan-interviewer` first to clarify the spec.
+- **Need brand context?** Run `brand-system` — it provides design tokens and component context.
+- **Need to break flow into tasks?** Run `task-breakdown` after — it consumes flow diagrams.
+
 ---
 
-## Before Starting
+## Agent Manifest
 
-### Step 0: Product Context
+| Agent | Layer | File | Focus |
+|-------|-------|------|-------|
+| Structure Agent | 1 (parallel) | `agents/structure-agent.md` | Entry points, core screens, decision points, exit points, flow type |
+| Edge Case Agent | 1 (parallel) | `agents/edge-case-agent.md` | Error, empty, loading, permission, offline states |
+| Diagram Agent | 2 (sequential) | `agents/diagram-agent.md` | Mermaid flowchart with 5 node shapes, annotations |
+| Validation Agent | 2 (sequential) | `agents/validation-agent.md` | Miller's threshold, ≤3 actions/screen, structural integrity |
+| Critic Agent | 2 (final) | `agents/critic-agent.md` | All edge cases handled, notation correct, screen inventory complete |
+
+### Shared References (read by agents)
+- `references/research-checklist.md` — Pre-design research: user research methods, information architecture, content strategy
+
+---
+
+## Routing Logic
+
+Only one route — all flows use the full agent stack. Complexity is handled by the structure-agent's sub-flow decomposition (flows >15 screens are split automatically).
+
+```
+1. Pre-dispatch: Gather context (Step 0) + Flow Interview
+2. LAYER 1 — Dispatch IN PARALLEL:
+   - structure-agent (maps screens, decisions, transitions)
+   - edge-case-agent (maps error, empty, loading, permission, offline states)
+3. MERGE: Combine structure + edge cases into unified flow model
+4. LAYER 2 — Dispatch SEQUENTIALLY:
+   - diagram-agent (receives merged structure + edge cases)
+   - validation-agent (receives structure + edge cases + diagram)
+5. Dispatch: critic-agent (receives complete flow)
+6. If FAIL → re-dispatch named agent(s) with feedback (max 2 cycles)
+7. Deliver artifact
+```
+
+---
+
+## Step 0: Pre-Dispatch Context Gathering
+
+### Product Context Check
 Check for `.agents/product-context.md`. If missing: **INTERVIEW.** Interview for product dimensions (what, who, problem, differentiator, constraints) and save to `.agents/product-context.md`. Or recommend running `icp-research (from hungv47/comms-skills)` to bootstrap it.
 
 If `.agents/product-context.md` has a `date` field older than 30 days, recommend re-running `icp-research` to refresh it before proceeding.
@@ -75,140 +126,86 @@ Interview for these dimensions before proceeding:
 9. Authentication requirements? (logged in, guest, role-based)
 10. Technical or business rules that force specific paths?
 
----
-
-## Step 1: Assess Flow Complexity
-
-Classify the flow to set structural expectations:
-
-| Type | Pattern | When to use | Typical depth |
-|------|---------|-------------|---------------|
-| **Linear** | A → B → C → Done | Onboarding, tutorials, checkout | 3-8 screens |
-| **Branching** | A → B or C based on condition | Personalization, role-based access | 5-15 screens |
-| **Cyclical** | A → B → C → A (loop) | Dashboards, feeds, iterative editing | 4-10 screens per cycle |
-| **Hub-and-spoke** | Hub → {A, B, C} → Hub | Settings, multi-feature navigation | 1 hub + 3-8 spokes |
-
-For flows exceeding 15 screens, decompose into sub-flows — each sub-flow is its own diagram with labeled entry/exit connectors.
+### Context to Pass to All Agents
+1. **Product:** description, feature, problem it solves
+2. **User:** role, persona, technical skill, frequency
+3. **Goal:** the single user goal this flow serves
+4. **Platform:** web, iOS, Android, cross-platform
+5. **Constraints:** auth requirements, business rules, existing flows
 
 ---
 
-## Step 2: Map Flow Structure
+## Dispatch Protocol
 
-Define all components before visualization:
+### How to spawn a sub-agent
 
-### Entry points
-List every way a user enters this flow (deep link, menu tap, redirect, notification). Each entry point becomes a start node.
+1. **Read** the agent instruction file — include its FULL content in the Agent prompt
+2. **Append** the context (product, user, goal, platform, constraints) after the instructions
+3. **Resolve file paths to absolute**: replace relative paths with absolute paths rooted at this skill's directory
+4. **Pass upstream artifacts by content**: the orchestrator reads `.agents/` files FIRST, then includes relevant excerpts in context. Sub-agents should NOT read artifact files directly.
+5. If **feedback** exists (from critic FAIL), append with header "## Critic Feedback — Address Every Point"
 
-### Core screens and states
-For each screen, capture:
-- **Screen name** — concrete label, not generic ("Payment Method Selection", not "Step 3")
-- **Purpose** — what the user decides or accomplishes here
-- **User actions** — every interactive element (tap, type, swipe, toggle)
-- **System responses** — what happens after each action (API call, validation, animation)
+### Single-agent fallback
 
-### Decision points
-For each branch:
-- **Condition** — exact rule ("cart total > $50", "user.role === 'admin'")
-- **Exits** — label every outgoing path, including the default/fallback
-- **Who decides** — user choice vs. system logic vs. data-driven
-
-### Edge cases
-Account for these states at every screen where they apply:
-- **Error** — validation failure, server error, timeout → recovery path
-- **Empty** — no data, first use → onboarding or placeholder
-- **Loading** — async operations → skeleton or spinner
-- **Permission** — insufficient access → upgrade prompt or redirect
-- **Offline** — no connectivity → cached state or retry
-
-### Exit points
-Label each exit:
-- **Success** — goal achieved
-- **Abandonment** — user leaves mid-flow (track where)
-- **Error terminal** — unrecoverable failure (with support/retry option)
-- **Redirect** — flow hands off to another flow
+If multi-agent dispatch is unavailable, execute each agent's instructions sequentially in-context:
+- Layer 1: map flow structure (screens, decisions, entries, exits), then map edge cases (error, empty, loading, permission, offline)
+- Layer 2: create Mermaid diagram from structure + edge cases, then validate against usability thresholds
+- Final: evaluate with critic rubric
 
 ---
 
-## Step 3: Create Flow Diagram
+## Layer 1: Parallel Foundation
 
-### Notation standards
+Spawn **IN PARALLEL**:
 
-Use Mermaid `graph TD` with these node shapes consistently:
+| Agent | Instruction File | Pass These Inputs | Reference Files |
+|-------|-----------------|-------------------|-----------------|
+| Structure Agent | `agents/structure-agent.md` | brief (product + user + goal + platform + constraints) | `references/research-checklist.md` |
+| Edge Case Agent | `agents/edge-case-agent.md` | brief (product + user + goal + platform + constraints) | `references/research-checklist.md` |
 
-| Shape | Meaning | Mermaid syntax |
-|-------|---------|----------------|
-| Rounded rectangle | Screen / page | `[Screen Name]` |
-| Diamond | Decision point | `{Condition?}` |
-| Stadium | Start / end | `([Start])` or `([End])` |
-| Hexagon | System process | `{{Process}}` |
-| Parallelogram | External input/output | `[/Input/]` |
-
-### Label conventions
-- Edge labels describe the trigger or condition: `-->|"Clicks Submit"|`
-- Use present tense: "Enters email", not "User enters email"
-- Decision exits use exact conditions: `-->|"Valid"|` and `-->|"Invalid"|`
-
-### Diagram construction
-
-```mermaid
-graph TD
-    Start([User opens app])
-    Start --> AuthCheck{Authenticated?}
-    AuthCheck -->|"Yes"| Dashboard[Dashboard]
-    AuthCheck -->|"No"| Login[Login Screen]
-    Login -->|"Submits credentials"| Validate{{Validate credentials}}
-    Validate -->|"Valid"| Dashboard
-    Validate -->|"Invalid"| LoginError[Error: Invalid credentials]
-    LoginError -->|"Retries"| Login
-    Login -->|"Taps 'Forgot password'"| Reset[Password Reset Flow]
-    Login -->|"Taps 'Sign up'"| Signup[Signup Flow]
-    Dashboard -->|"Logs out"| Login
-```
-
-### Annotations
-Add annotations below the diagram for logic that does not fit in edge labels:
-
-```
-**Annotations:**
-1. AuthCheck: Uses JWT token expiry. Tokens refresh silently if < 24h expired.
-2. Validate: Rate-limited to 5 attempts/15min. After limit → CAPTCHA gate.
-3. LoginError: Displays generic message — avoid revealing whether email exists.
-```
-
-### Sub-flow references
-For complex flows, split into named sub-flows and link them:
-```
-→ [See: Signup Sub-flow] (entry: "Taps 'Sign up'" from Login)
-→ [See: Password Reset Sub-flow] (entry: "Taps 'Forgot password'" from Login)
-```
+Wait for both to complete. Their outputs feed the merge step and Layer 2.
 
 ---
 
-## Step 4: Validate
+## Merge Step
 
-Run through these checks:
+Combine structure-agent and edge-case-agent outputs into a unified flow model:
 
-**Structural integrity**
-- Trace every path from every entry point to an exit — no orphan screens
-- Confirm every decision diamond has ≥2 labeled exits
-- Verify no screen is unreachable
+| Section | Owner Agent |
+|---------|-----------|
+| Flow classification | Structure Agent |
+| Entry points | Structure Agent |
+| Core screens (name, purpose, actions, responses) | Structure Agent |
+| Decision points (condition, exits, who decides) | Structure Agent |
+| Exit points | Structure Agent |
+| Screen-to-screen transitions | Structure Agent |
+| Error states per screen | Edge Case Agent |
+| Empty states per screen | Edge Case Agent |
+| Loading states per screen | Edge Case Agent |
+| Permission states per screen | Edge Case Agent |
+| Offline states per screen | Edge Case Agent |
+| Back/cancel paths | Edge Case Agent |
 
-**Completeness**
-- Error states exist for every action that can fail
-- Back/cancel is available wherever the user might want to retreat
-- Empty and loading states are noted where data is fetched
+**Cross-reference check before Layer 2:** Verify that every screen in the structure-agent's inventory has been checked by the edge-case-agent. If any screen is missing edge case coverage, flag it before dispatching diagram-agent.
 
-**Usability**
-- Happy path is ≤7 steps from entry to success (Miller's threshold)
-- No unnecessary decision points — if the system can decide, automate it
-- Cognitive load per screen is manageable (≤3 primary actions)
+---
 
-**Handoff readiness**
-- Screen names match what developers and designers will use
-- Conditions on decision points are implementable (not vague)
-- Async operations are identified (API calls, file uploads, payment processing)
+## Layer 2: Sequential Chain
 
-Iterate with the user on any gaps found.
+Dispatch **ONE AT A TIME, IN ORDER**:
+
+| Step | Agent | Instruction File | Receives |
+|------|-------|-----------------|----------|
+| 1 | Diagram Agent | `agents/diagram-agent.md` | Merged structure + edge cases |
+| 2 | Validation Agent | `agents/validation-agent.md` | Structure + edge cases + diagram |
+| 3 | Critic Agent | `agents/critic-agent.md` | Complete flow (all outputs merged + validation results) |
+
+---
+
+## Critic Gate
+
+- **PASS:** Deliver the artifact.
+- **FAIL:** Re-dispatch named agent(s) with critic feedback. Max 2 rewrite cycles. After 2 failures, deliver with critic annotations and flag to user.
 
 ---
 
@@ -276,96 +273,67 @@ Hand off to implementation. Pair with `brand-system` for visual design tokens if
 
 ---
 
-## Worked Example
+## Worked Example — Mobile Checkout (Full Flow)
 
 **User:** "Map the checkout flow for our e-commerce app."
 
-**Interview:**
-- "What platform?" → "Mobile app, iOS and Android"
-- "Who is the user?" → "Logged-in customer with items in cart"
-- "Where does the flow start?" → "User taps 'Checkout' from cart"
-- "What's the success state?" → "Order confirmed, confirmation screen shown"
-- "Constraints?" → "Must support Apple Pay, credit card, and PayPal. Minimum order $10."
+### Step 0: Pre-Dispatch + Interview
+- Platform: Mobile app, iOS and Android
+- User: Logged-in customer with items in cart
+- Entry: User taps "Checkout" from cart
+- Goal: Complete purchase
+- Constraints: Apple Pay, credit card, PayPal. Minimum order $10.
+- Flow type assessment: Branching (payment method creates 3 parallel paths)
 
-**Complexity assessment:** Branching flow — payment method selection creates 3 parallel paths.
+### Layer 1: Parallel Foundation
+Both agents dispatched in parallel:
+- **Structure agent** returns: 6 core screens (Shipping Address, Shipping Method, Payment Selection, Card Entry Form, Order Review, Order Confirmation). 3 decision points (minimum check, payment method, payment result). 2 entry points (Checkout button, deep link). 3 exits (success, abandonment, back to cart).
+- **Edge case agent** returns: Error states for payment (API timeout, card declined, rate limit). Empty state for address (pre-fill from profile). Loading state for payment processing (spinner + disable back). Permission state for Apple Pay (hide if unsupported). Back/cancel at every screen with data preservation.
 
-**Artifact saved to `.agents/design/user-flow.md`:**
+### Merge
+Combined into unified flow model. Cross-reference: all 6 screens have edge case coverage. Proceed.
 
-```markdown
-# User Flow: Mobile Checkout
+### Layer 2: Sequential Chain
+- **Diagram agent** returns: Mermaid `graph TD` with correct shapes (stadiums for entry/exit, diamonds for decisions, hexagons for payment processing). 3 annotations (MinCheck evaluated on subtotal, ApplePay uses Stripe SDK, Processing 3s timeout).
+- **Validation agent** returns: Happy path 5 steps (PASS ≤7). Max 3 actions per screen (PASS). All paths traced to exits (PASS). 3 error recovery paths (PASS). 0 dead ends. Handoff ready (screen names match dev vocabulary, conditions implementable).
+- **Critic agent** returns: PASS. All quality gate items checked. Scoring: structural integrity 5, edge case coverage 5, diagram correctness 5, usability 5, handoff readiness 4 (one annotation could be more specific). Overall: 4.8.
 
-## Context
-- **Product:** E-commerce mobile app
-- **User:** Logged-in customer
-- **Goal:** Complete purchase from cart
-- **Platform:** iOS + Android
-- **Flow type:** Branching
-
-## Flow Diagram
-
-​```mermaid
-graph TD
-    Start([Taps 'Checkout' from Cart])
-    Start --> MinCheck{Cart ≥ $10?}
-    MinCheck -->|"No"| MinError[Error: Minimum $10 required]
-    MinError -->|"Returns to cart"| End1([Back to Cart])
-    MinCheck -->|"Yes"| Address[Shipping Address]
-    Address -->|"Confirms address"| Shipping[Shipping Method]
-    Address -->|"Taps 'Cancel'"| End1
-    Shipping -->|"Selects method"| Payment[Payment Selection]
-    Payment -->|"Apple Pay"| ApplePay{{Apple Pay Sheet}}
-    Payment -->|"Credit Card"| CardEntry[Card Entry Form]
-    Payment -->|"PayPal"| PayPalRedirect{{PayPal Redirect}}
-    ApplePay -->|"Authorized"| Review[Order Review]
-    ApplePay -->|"Declined"| PayError[Payment Error]
-    CardEntry -->|"Valid card"| Review
-    CardEntry -->|"Invalid"| CardError[Validation Error]
-    CardError -->|"Corrects"| CardEntry
-    PayPalRedirect -->|"Approved"| Review
-    PayPalRedirect -->|"Cancelled"| Payment
-    PayError -->|"Tries again"| Payment
-    Review -->|"Confirms order"| Processing{{Process Payment}}
-    Processing -->|"Success"| Confirmation[Order Confirmation]
-    Processing -->|"Failure"| PayError
-    Confirmation --> End2([Done])
-​```
-
-**Annotations:**
-1. MinCheck: Evaluated on cart subtotal before tax/shipping.
-2. ApplePay: Uses Stripe Apple Pay SDK. Falls back to card entry if unavailable.
-3. Processing: 3-second timeout → retry once, then show PayError.
-
-## Screen Inventory
-
-| # | Screen | Purpose | Actions | Next States |
-|---|--------|---------|---------|-------------|
-| 1 | Shipping Address | Confirm/edit delivery address | Confirm, Edit, Cancel | Shipping Method, Cart |
-| 2 | Shipping Method | Select delivery speed | Select option | Payment Selection |
-| 3 | Payment Selection | Choose payment method | Apple Pay, Card, PayPal | Respective payment flow |
-| 4 | Card Entry Form | Enter card details | Submit, Back | Order Review, Validation Error |
-| 5 | Order Review | Final confirmation | Confirm, Edit, Cancel | Processing, previous screens |
-| 6 | Order Confirmation | Success state | View order, Continue shopping | Done |
-
-## Edge Cases Handled
-
-| State | Screen(s) | Handling |
-|-------|-----------|----------|
-| Error | Payment flows | Return to Payment Selection with message |
-| Empty | Shipping Address | Pre-fill from profile, prompt if missing |
-| Loading | Processing | Spinner with "Processing payment..." — disable back button |
-| Permission | Apple Pay | Hide option if device doesn't support it |
-
-## Validation Summary
-
-- Happy path length: 5 steps (Address → Shipping → Payment → Review → Confirmation)
-- Decision points: 3 (minimum check, payment method, payment result)
-- Error recovery paths: 3 (minimum order, card validation, payment failure)
-- Dead ends: 0
-```
+### Deliver
+Artifact saved to `.agents/design/user-flow.md`.
 
 ---
 
-## References
+## Anti-Patterns
 
+**Happy path only** — Mapping only the success path produces flows that break at the first error. INSTEAD: Edge-case-agent runs in parallel with structure-agent, ensuring error/empty/loading/permission/offline states are mapped for every screen.
+
+**Generic screen names** — "Step 1", "Step 2", "Step 3" tell nobody anything. INSTEAD: Concrete names that match dev/design vocabulary: "Payment Method Selection", "Shipping Address", "Order Review."
+
+**Unlabeled diagram edges** — Bare `-->` connections create ambiguity. INSTEAD: Every edge has a label: `-->|"Clicks Submit"|`. Labels use present tense.
+
+**Wrong diagram shapes** — Using rectangles for decisions or diamonds for screens. INSTEAD: 5 shapes used consistently — rectangle=screen, diamond=decision, stadium=start/end, hexagon=process, parallelogram=I/O.
+
+**Dead-end errors** — "Something went wrong" with no recovery path. INSTEAD: Every error state leads to a recovery action (retry, go back, contact support, try alternative).
+
+**Overloaded screens** — A screen with 5+ primary actions creates decision paralysis. INSTEAD: Split into focused screens or move secondary actions to navigation. ≤3 primary actions per screen.
+
+**Vague decision conditions** — "If appropriate" or "when ready" are not implementable. INSTEAD: Exact rules a developer can code: "cart.subtotal >= 10.00", "user.role === 'admin'".
+
+**Skipping validation** — Assuming the structure is correct without tracing paths. INSTEAD: Validation-agent traces every path from every entry to an exit, checking for orphans and dead ends.
+
+---
+
+## Agent Files
+
+### Sub-Agent Instructions (agents/)
+- [agents/structure-agent.md](agents/structure-agent.md) — Entry points, screens, decisions, exits, flow type
+- [agents/edge-case-agent.md](agents/edge-case-agent.md) — Error, empty, loading, permission, offline states
+- [agents/diagram-agent.md](agents/diagram-agent.md) — Mermaid flowchart, annotations, sub-flow references
+- [agents/validation-agent.md](agents/validation-agent.md) — Usability thresholds, structural integrity, handoff readiness
+- [agents/critic-agent.md](agents/critic-agent.md) — Quality scoring, PASS/FAIL
+
+### Shared References (references/)
 - [references/research-checklist.md](references/research-checklist.md) — Pre-design research: user research methods, information architecture, content strategy
+
+### Scripts
 - [scripts/generate_flow.py](scripts/generate_flow.py) — Generate Mermaid diagrams programmatically for complex or multi-variant flows
