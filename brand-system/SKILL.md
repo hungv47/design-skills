@@ -6,6 +6,29 @@ license: MIT
 metadata:
   author: hungv47
   version: "5.0.0"
+routing:
+  intent-tags:
+    - brand-identity
+    - design-tokens
+    - visual-system
+    - color-system
+    - typography-system
+    - brand-voice
+  position: pipeline
+  produces:
+    - design/brand-system.md
+  consumes:
+    - product-context.md
+  requires: []
+  defers-to:
+    - skill: user-flow
+      when: "need screen mapping, not brand identity"
+    - skill: copywriting
+      when: "need copy craft, not brand voice definition"
+  parallel-with:
+    - imc-plan
+  interactive: false
+  estimated-complexity: heavy
 ---
 
 # Brand Identity & Design System — Orchestrator
