@@ -6,6 +6,28 @@ license: MIT
 metadata:
   author: hungv47
   version: "3.0.0"
+routing:
+  intent-tags:
+    - user-flow
+    - screen-mapping
+    - ux-flow
+    - journey-mapping
+    - wireframe-flow
+  position: pipeline
+  produces:
+    - design/user-flow.md
+  consumes:
+    - product-context.md
+    - design/brand-system.md
+  requires: []
+  defers-to:
+    - skill: brand-system
+      when: "need visual identity, not screen flows"
+    - skill: system-architecture
+      when: "need technical API design, not user-facing flow"
+  parallel-with: []
+  interactive: false
+  estimated-complexity: medium
 ---
 
 # User Flow Design — Orchestrator
