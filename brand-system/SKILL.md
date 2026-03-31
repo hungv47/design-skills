@@ -202,6 +202,11 @@ Missing product details are not guessable — interview for them.
 4. **Pass upstream artifacts by content**: the orchestrator reads `.agents/` files FIRST, then includes relevant excerpts in context. Sub-agents should NOT read artifact files directly.
 5. If **feedback** exists (from critic FAIL), append with header "## Critic Feedback — Address Every Point"
 
+### Conventions
+
+- **Source citation:** When stating facts about brand psychology, color theory, or archetype effectiveness, cite the source. If from a web search, include the URL. If a fact cannot be attributed, flag it as `[UNVERIFIED]`.
+- **Context loaded:** When producing the artifact, include which upstream artifacts were read and their versions/dates in the artifact body. This creates an audit trail for downstream skills.
+
 ### Single-agent fallback
 
 If multi-agent dispatch is unavailable, execute each agent's instructions sequentially in-context:
